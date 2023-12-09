@@ -18,7 +18,7 @@ pub trait MemoryDefaultRetrieval<T>: Memory<T> {
 #[derive(Clone)]
 struct Engram<T>(T, OffsetDateTime);
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Brain<T> {
     memory: Arc<RwLock<HashMap<String, Engram<T>>>>,
     retention: Duration,
