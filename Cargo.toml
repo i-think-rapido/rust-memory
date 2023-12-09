@@ -2,6 +2,12 @@
 name = "memory"
 version = "0.1.0"
 edition = "2021"
+authors = ["Romeo Disca"]
+readme = "README.md"
+license = "MIT"
+license-file = "LICENSE.md"
+repository = "git@github.com:i-think-rapido/rust-memory.git"
+homepage = "https://github.com/i-think-rapido/rust-memory"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
