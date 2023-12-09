@@ -1,6 +1,6 @@
 [package]
 name = "memory"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["Romeo Disca"]
 readme = "README.md"
@@ -9,6 +9,7 @@ license-file = "LICENSE.md"
 repository = "https://github.com/i-think-rapido/rust-memory.git"
 homepage = "https://github.com/i-think-rapido/rust-memory"
 description = "HashMap implementation with forget function"
+documentation = "https://docs.rs/memory/latest/memory/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
