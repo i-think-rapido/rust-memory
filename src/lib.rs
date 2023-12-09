@@ -62,10 +62,13 @@ impl<T: Default + Clone> MemoryDefaultRetrieval<T> for Brain<T> {
 
 pub struct MemorySubstitute<'map, 'memory, T> {
     map: &'map HashMap<String, String>,
-    memory: &'memory Brain<T>,
+    memory: &'memory dyn MemoryDefaultRetrieval<T>,
 }
 impl<'map, 'memory, T> MemorySubstitute<'map, 'memory, T> {
-    pub fn new(memory: &'memory Brain<T>, map: &'map HashMap<String, String>) -> Self {
+    pub fn new(
+        memory: &'memory dyn MemoryDefaultRetrieval<T>,
+        map: &'map HashMap<String, String>,
+    ) -> Self {
         Self { map, memory }
     }
 }
