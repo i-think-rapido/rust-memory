@@ -46,9 +46,33 @@ impl<T: Default + Clone> Memory<T> {
     }
 }
 
+pub struct Alias<'map, 'memory, T> {
+    map: &'map HashMap<String, String>,
+    memory: &'memory Memory<T>,
+}
+impl<'map, 'memory, T> Alias<'map, 'memory, T> {
+    pub fn new(memory: &'memory Memory<T>, map: &'map HashMap<String, String>) -> Self {
+        Self { map, memory }
+    }
+}
+impl<T: Clone> Alias<'_, '_, T> {
+    pub fn memoize(&self, key: &str, value: T) {
+        self.memory.memoize(self.map.get(key).unwrap_or(&key.to_string()), value);
+    }
+    pub fn retrieve(&self, key: &str) -> Option<T> {
+        self.memory.retrieve(self.map.get(key).unwrap_or(&key.to_string()))
+    }
+}
+impl<T: Default + Clone> Alias<'_, '_, T> {
+    pub fn retrieve_to_value(&self, key: &str) -> T {
+        self.memory.retrieve_to_value(self.map.get(key).unwrap_or(&key.to_string()))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use common_macros::hash_map;
 
     #[test]
     fn memory() {
@@ -70,6 +94,31 @@ mod tests {
         assert_eq!(memory.retrieve("a"), None);
         assert_eq!(memory.retrieve_to_value("a"), 0);
         assert_eq!(memory.retrieve("b"), Some(6));
+    }
+
+    #[test]
+    fn alias() {
+        let memory = Memory::new(3.milliseconds());
+
+        memory.memoize("a", 3);
+        memory.memoize("b", 6);
+
+        let map = hash_map!(
+            "aaa".to_string() => "a".to_string()
+        );
+
+        let alias = Alias::new(&memory, &map);
+
+        assert_eq!(alias.retrieve("aaa"), Some(3));
+        assert_eq!(alias.retrieve("bbb"), None);
+
+        alias.memoize("aaa", 5);
+        assert_eq!(alias.retrieve("aaa"), Some(5));
+        assert_eq!(memory.retrieve("a"), Some(5));
+
+        alias.memoize("ccc", 9);
+        assert_eq!(alias.retrieve("ccc"), Some(9));
+        assert_eq!(memory.retrieve("ccc"), Some(9));
     }
 
 }

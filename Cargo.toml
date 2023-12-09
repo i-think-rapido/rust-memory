@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 parking_lot = "0.12.1"
 time = "0.3.30"
+
+[dev-dependencies]
+common_macros = "0.1.1"
