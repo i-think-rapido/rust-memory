@@ -62,11 +62,11 @@ impl<T: Default + Clone> MemoryDefaultRetrieval<T> for Brain<T> {
 
 pub struct MemorySubstitute<'map, 'memory, T> {
     map: &'map HashMap<String, String>,
-    memory: &'memory dyn MemoryDefaultRetrieval<T>,
+    memory: &'memory dyn Memory<T>,
 }
 impl<'map, 'memory, T> MemorySubstitute<'map, 'memory, T> {
     pub fn new(
-        memory: &'memory dyn MemoryDefaultRetrieval<T>,
+        memory: &'memory dyn Memory<T>,
         map: &'map HashMap<String, String>,
     ) -> Self {
         Self { map, memory }
@@ -87,8 +87,7 @@ impl<T: Clone> Memory<T> for MemorySubstitute<'_, '_, T> {
 }
 impl<T: Default + Clone> MemoryDefaultRetrieval<T> for MemorySubstitute<'_, '_, T> {
     fn retrieve_or_default(&self, key: &str) -> T {
-        self.memory
-            .retrieve_or_default(self.map.get(key).unwrap_or(&key.to_string()))
+        self.retrieve(key).unwrap_or(T::default())
     }
 }
 
